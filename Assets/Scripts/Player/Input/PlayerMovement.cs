@@ -5,45 +5,63 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    //public variables
-    public CharacterController controller;
-    public float speed = 12f;
-    public float gravity = -9.8f;
+    /* 
+  Create a variable called 'rb' that will represent the 
+  rigid body of this object.
+  */
+    private Rigidbody rb;
+    public float moveSpeed;
+    //public AudioSource footStepSoundSource;
+    /* 
+    Creates a public variable that will be used to set 
+    the movement intensity (from within Unity)
+    */
 
-    public Transform groundCheck;
-    public float groundDistance = .4f;
-    public LayerMask groundMask; 
+    //void playAudio()
+    //{
+    //    if (!footStepSoundSource.isPlaying)
+    //    {
+    //        footStepSoundSource.Play();
+    //    }
+    //}
 
-    //private variables
-    Vector3 velocity;
-    bool isGrounded; 
-
-    // Start is called before the first frame update
     void Start()
     {
-        
+        // make our rb variable equal the rigid body component
+        rb = GetComponent<Rigidbody>();
+        //footStepSoundSource = GetComponent<AudioSource>();
+        // yPos = transform.position.y;
     }
 
-    // Update is called once per frame
     void Update()
     {
-      
-
-        //creates an invisible sphere around the player that checks if the player is on the ground. 
-        //if anything collides with the circle than isGrounded is going to be true. 
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        
-        //allows to get the default inputs from unity
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
-
-        //allows the player controller to move based on the character controller
-        Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * speed * Time.deltaTime);
-
-        //applies gravity to the player controller
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
-        
+        // Move Forwards
+        if (Input.GetKey(KeyCode.W))
+        {
+           // playAudio();
+            transform.position += transform.forward * moveSpeed * Time.deltaTime;
+        }
+        // Move Backwards
+        else if (Input.GetKey(KeyCode.S))
+        {
+          //  playAudio();
+            transform.position -= transform.forward * moveSpeed * Time.deltaTime;
+        }
+        // Move Left
+        else if (Input.GetKey(KeyCode.A))
+        {
+           // playAudio();
+            transform.position -= transform.right * moveSpeed * Time.deltaTime;
+        }
+        // Move Right
+        else if (Input.GetKey(KeyCode.D))
+        {
+           // playAudio();
+            transform.position += transform.right * moveSpeed * Time.deltaTime;
+        }
+        else
+        {
+            rb.velocity = Vector3.zero;
+        }
     }
 }
